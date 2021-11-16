@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "724392296756",
+    "project_id": "logintest-cf1bc",
+    "storage_bucket": "logintest-cf1bc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:724392296756:android:e4501a0dcc57aa78ca2561",
+        "android_client_info": {
+          "package_name": "com.example.loginpage"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "724392296756-84kq7f4v97jfaf97unmbgbn4p35fa759.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAx4mzANKBvcS73O27x6AjgfMZ0NGq6WSU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "724392296756-84kq7f4v97jfaf97unmbgbn4p35fa759.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
