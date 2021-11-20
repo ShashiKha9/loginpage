@@ -7,7 +7,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Firebase.initializeApp();
   runApp(MaterialApp(
-      home: CameraScreen()));
+      home: PageScreen()));
 }
 
 
