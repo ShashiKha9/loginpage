@@ -21,6 +21,7 @@ class OtpScreen extends StatefulWidget {
   OtpScreenState createState() => OtpScreenState();
 }
 class OtpScreenState extends State<OtpScreen>{
+   late String resend= "";
 
   MobileVerificationState currentState=MobileVerificationState.Show_Mobile_Form_State;
   late String dialCodeDigits = "+00";
@@ -92,7 +93,7 @@ getMobileFormWidget(context){
         ),
         ),
         SizedBox(height: 16,),
-        FlatButton(onPressed: () async{
+        FlatButton(onPressed:() async{
           starttimer();
           setState(() {
             showLoading=true;
@@ -148,12 +149,7 @@ getMobileFormWidget(context){
         ),
         ),
         SizedBox(height: 16,),
-        FlatButton(onPressed: () {
-          PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
-              verificationId: verificationId, smsCode: otpController.text,);
-          signInWithPhoneAuthCredential(phoneAuthCredential);
-        }
-            , child: Text("Get Started")),
+
        Wrap(
          children: [
            Text("Send OTP again in ",style: TextStyle(
@@ -178,22 +174,34 @@ getMobileFormWidget(context){
     text: "Did not get otp",
     style: TextStyle(fontSize: 14,color: Colors.black)
     ),
+
     TextSpan(
-    text: " resend?",
-    style: TextStyle(fontSize: 16,color: wait? Colors.blue:Colors.grey),
+    text: wait?resend:"resend?",
+    style: TextStyle(fontSize: 18,color: wait? Colors.grey:Colors.blue),
     recognizer: TapGestureRecognizer()
     ..onTap=wait ?null:(){
       setState(() {
+        starttimer();
         start=30;
-        start--;
         wait= true;
       });
+
     print("judnu");
+    PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
+    verificationId: verificationId, smsCode: otpController.text,);
+    signInWithPhoneAuthCredential(phoneAuthCredential);
     }
+
 
     )
     ]
-    ))
+    )),
+        FlatButton(onPressed: () {
+          PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
+            verificationId: verificationId, smsCode: otpController.text,);
+          signInWithPhoneAuthCredential(phoneAuthCredential);
+        }
+            , child: Text("Get Started")),
     ],
 
 
