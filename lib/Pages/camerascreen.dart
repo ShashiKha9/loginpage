@@ -19,7 +19,7 @@ class CameraScreen extends StatefulWidget{
 }
 class CameraScreenState extends State<CameraScreen>{
 
-  late File videoFile;
+    File ? videoFile;
 
   late CameraController controller;
   //  List<CameraDescription>? cameras;
@@ -45,6 +45,7 @@ class CameraScreenState extends State<CameraScreen>{
       );
       if(pickedFile!= null){
   setState(() {
+    videoFile!=pickedFile ;
   });
 }
   }

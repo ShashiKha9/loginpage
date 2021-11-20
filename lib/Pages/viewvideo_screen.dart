@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:chewie/chewie.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +20,7 @@ class ViewVideoScreen extends StatefulWidget{
 class ViewVideoScreenState extends State<ViewVideoScreen>{
       ChewieController ? _chewieController;
 
+
       @override
   void initState() {
     super.initState();
@@ -25,7 +28,7 @@ class ViewVideoScreenState extends State<ViewVideoScreen>{
       videoPlayerController: widget.videoPlayerController,
       aspectRatio: 16 / 9,
       autoInitialize: true,
-      autoPlay: true,
+      autoPlay: false,
       looping: widget.looping,
         errorBuilder: (context,errorMessage){
         return Center(
@@ -94,8 +97,8 @@ class PageScreenState extends State <PageScreen>{
       bottomNavigationBar: BottomNavigationBar(
         onTap: onTapped,
         currentIndex: selectedindex,
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.blue,
+        selectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.black,
 
         items: [
           BottomNavigationBarItem(
@@ -124,27 +127,28 @@ class PageScreenState extends State <PageScreen>{
 
 }
 class VideoList extends StatelessWidget{
+   File? videoFile;
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
       body:Container(
-        height: 200,
-        child:
-        ViewVideoScreen(
-          videoPlayerController: VideoPlayerController.network(
-              "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4"
-          ), looping: true,
+        height: 250,
+          child:videoFile == null?Center(
 
 
-
-        ),
-
-
-
-
-
-      ),
+          ):Container(
+            height: 250,
+            child: Chewie(
+                controller: ChewieController(
+                  videoPlayerController: VideoPlayerController.file(videoFile!),
+                  aspectRatio: 16/9,
+                  autoPlay: false,
+                  looping: true,
+                )),
+          )
+      )
     );
   }
 }
