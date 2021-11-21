@@ -1,10 +1,14 @@
 import 'dart:io';
 
 import 'package:chewie/chewie.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:loginpage/Pages/camerascreen.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
+
 
 class ViewVideoScreen extends StatefulWidget{
   final VideoPlayerController videoPlayerController;
@@ -126,8 +130,35 @@ class PageScreenState extends State <PageScreen>{
   }
 
 }
-class VideoList extends StatelessWidget{
+class VideoList extends StatefulWidget{
+  VideoListState createState()=> VideoListState();
+}
+class VideoListState extends State<VideoList>{
    File? videoFile;
+   recvideo() async{
+     final pickedFile = await ImagePicker().getVideo(
+       source: ImageSource.camera,
+     );
+     if(pickedFile!= null){
+       setState(() async {
+         videoFile=File(pickedFile.path) ;
+
+
+
+
+
+       });
+     }
+   }
+   Future<File?>pickVideoFile() async {
+     final result = await FilePicker.platform.pickFiles(type: FileType.video);
+     if(result == null) return null;
+
+     return File(result.files.single.path!);
+
+
+   }
+   ChewieController ? _chewieController;
 
   @override
   Widget build(BuildContext context) {
@@ -136,19 +167,38 @@ class VideoList extends StatelessWidget{
       body:Container(
         height: 250,
           child:videoFile == null?Center(
+            child:Container(
+              color: Colors.red,
+            ),
 
 
-          ):Container(
-            height: 250,
+          ):FittedBox(
+            fit: BoxFit.contain,
             child: Chewie(
                 controller: ChewieController(
-                  videoPlayerController: VideoPlayerController.file(videoFile!),
+                  videoPlayerController: VideoPlayerController.asset("efueijt"),
                   aspectRatio: 16/9,
                   autoPlay: false,
-                  looping: true,
+                  looping: false,
                 )),
           )
-      )
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(CupertinoIcons.arrow_down_doc_fill),
+        onPressed: () async {
+final file = await pickVideoFile();
+if(file == null) return;
+Chewie(
+    controller: ChewieController(
+      videoPlayerController: VideoPlayerController.file(file),
+      aspectRatio: 16/9,
+      autoPlay: false,
+      looping: false,
+    ));
+
+      },
+
+      ),
     );
   }
 }
