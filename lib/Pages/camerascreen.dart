@@ -9,8 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:video_player/video_player.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 
 
@@ -28,6 +26,7 @@ class CameraScreenState extends State<CameraScreen>{
     File ? videoFile;
     // String ? _videopath;
     File ?_storedImage;
+    String ? dirPath;
 
 
     // CameraController? controller;
@@ -50,6 +49,7 @@ class CameraScreenState extends State<CameraScreen>{
   //   super.dispose();
   // }
 
+
     recvideo() async{
       final pickedFile = await ImagePicker().getVideo(
         source: ImageSource.camera,
@@ -63,7 +63,7 @@ class CameraScreenState extends State<CameraScreen>{
       if(pickedFile!= null){
         setState(()  {
           videoFile=File(pickedFile.path);
-          // _storedImage == videoFile;
+          _storedImage == imagePermanent;
 
 
     // Future<File> saveImagePermanently(String imagePath) async{
@@ -96,12 +96,18 @@ class CameraScreenState extends State<CameraScreen>{
     }
   Future saveImagePermanently(String imagePath) async{
 
-        final directory= await getExternalStorageDirectory();
+        final directory = await getExternalStorageDirectory();
       final name = basename(imagePath);
-      final image = '${directory!.path/name};
+      final image = "${directory!.path}";
       final myImgDir = await new Directory(image).create();
         var filepath = new File("$image");
+       // var newFile = await filepath.writeAsBytesSync(/*image bytes*/);
+       // await newFile.create();
       // ..writeAsBytesSync();
+
+
+
+
 
 
       return filepath;
@@ -137,25 +143,27 @@ class CameraScreenState extends State<CameraScreen>{
     //     ),
     // ),
 
-      Container(
-        height: 250,
-        child:videoFile == null?Center(
-          child:Container(
-            color: Colors.red,
-          ),
+    //   Container(
+    //     height: 250,
+    //     child:videoFile == null?Center(
+    //       child:Container(
+    //         color: Colors.red,
+    //       ),
+    //
+    //     ):Container(
+    //       height: 250,
+    //       child: Chewie(
+    //           controller: ChewieController(
+    //             videoPlayerController: VideoPlayerController.file(videoFile!),
+    //             aspectRatio: 16/9,
+    //             autoPlay: false,
+    //             looping: true,
+    //           ))
+    //       ,
+    //     ),
+    // ),
 
-        ):Container(
-          height: 250,
-          child: Chewie(
-              controller: ChewieController(
-                videoPlayerController: VideoPlayerController.file(videoFile!),
-                aspectRatio: 16/9,
-                autoPlay: false,
-                looping: true,
-              ))
-          ,
-        ),
-    ),
+
 
        SizedBox(
          height: 200,

@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:loginpage/Pages/viewvideo_screen.dart';
 
 import 'homepgae_screen.dart';
  enum MobileVerificationState{
@@ -22,6 +23,7 @@ class OtpScreen extends StatefulWidget {
 }
 class OtpScreenState extends State<OtpScreen>{
    late String resend= "";
+    int ?_forceResendingToken;
 
   MobileVerificationState currentState=MobileVerificationState.Show_Mobile_Form_State;
   late String dialCodeDigits = "+00";
@@ -43,7 +45,7 @@ class OtpScreenState extends State<OtpScreen>{
          showLoading= true;
        });
        if(authCredential?.user!= null){
-         Navigator.push(context, MaterialPageRoute(builder: (context)=> Home()));
+         Navigator.push(context, MaterialPageRoute(builder: (context)=> PageScreen()));
        }
      } on FirebaseAuthException catch(e){
        setState(() {
@@ -98,7 +100,9 @@ getMobileFormWidget(context){
           setState(() {
             showLoading=true;
           });
-         await _auth.verifyPhoneNumber(phoneNumber: phoneNumberController.text,
+         await _auth.verifyPhoneNumber(phoneNumber: "+91${phoneNumberController.text}",
+              forceResendingToken: _forceResendingToken,
+
 
               verificationCompleted: (phoneAuthCredential)async{
                 setState(() {
@@ -114,21 +118,31 @@ getMobileFormWidget(context){
                 _scaffoldkey.currentState!.showSnackBar(SnackBar(content: Text(verificationFailed.message!)));
 
               },
-              codeSent: (verificationId,resendingToken)async{
+              codeSent: (verificationId,forceresendingToken)async{
             setState(() {
               currentState=MobileVerificationState.Show_Otp_Form_State;
               this.verificationId=verificationId;
+              this._forceResendingToken=forceresendingToken;
               showLoading= false;
             });
 
-              },
-              codeAutoRetrievalTimeout: (verificationId)async {
+
 
               },
+              codeAutoRetrievalTimeout: (verificationId)async {
+                print("Time Out. Duration Exceeded");
+                this.verificationId=verificationId;
+
+              },
+           timeout: Duration(milliseconds: 10000)
+
+
+
 
           );
 
         }
+
 
         ,
           child: Text("SEND"),
