@@ -54,38 +54,19 @@ class CameraScreenState extends State<CameraScreen>{
       final pickedFile = await ImagePicker().getVideo(
         source: ImageSource.camera,
       );
-      // final Directory extDir = await getApplicationDocumentsDirectory();
-      // String dirPath = extDir.path;
-      // final String filePath = '$dirPath/image.png';
-      // final File newImage = await videoFile!.copy(filePath);
-      final imagePermanent = await saveImagePermanently(pickedFile!.path);
 
       if(pickedFile!= null){
         setState(()  {
           videoFile=File(pickedFile.path);
-          _storedImage == imagePermanent;
-
-
-    // Future<File> saveImagePermanently(String imagePath) async{
-    //   final directory= await getApplicationDocumentsDirectory();
-    //   final name = basename(pickedFile.path);
-    //   final image = File("${directory.path}/$name");
-    //   return File(imagePath).copy(image.path);
-    //
-    //
-    // }
-
-    // Directory tempDir = await getApplicationDocumentsDirectory();
-    // String tempPath = tempDir.path;
-    // final String fileName = basename(pickedFile.path); // Filename without extension
-    // final String fileExtension = extension(pickedFile.path);
-    // // final File localImage = await image.copy('$path/$fileName');
-    // videoFile = await videoFile!.copy('$path/$fileName$fileExtension');
-
+          // _storedImage == imagePermanent;
 
   });
+        videoFile=File(pickedFile!.path);
+        final imagePermanent = await saveImagePermanently(pickedFile!.path);
 
-}
+
+
+      }
       // final directory= await getExternalStorageDirectory();
       // final String path = directory!.path;
       // // this._fileName  = path;
@@ -98,9 +79,12 @@ class CameraScreenState extends State<CameraScreen>{
 
         final directory = await getExternalStorageDirectory();
       final name = basename(imagePath);
-      final image = "${directory!.path}";
+      final image = "${directory!.path}/fluttervideos";
       final myImgDir = await new Directory(image).create();
-        var filepath = new File("$image");
+        var kompresimg = new File("$image/image_.mp4")
+          ..writeAsBytesSync(videoFile!.readAsBytesSync());
+
+        // var filepath = new File("$image");
        // var newFile = await filepath.writeAsBytesSync(/*image bytes*/);
        // await newFile.create();
       // ..writeAsBytesSync();
@@ -110,7 +94,7 @@ class CameraScreenState extends State<CameraScreen>{
 
 
 
-      return filepath;
+      // return filepath;
   //
   //
   //

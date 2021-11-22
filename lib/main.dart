@@ -9,7 +9,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Firebase.initializeApp();
   runApp(MaterialApp(
-      home: OtpScreen()));
+      home: PageScreen()));
 }
 
 

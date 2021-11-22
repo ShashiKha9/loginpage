@@ -11,9 +11,11 @@ import 'package:flutter/services.dart';
 import 'package:loginpage/Pages/viewvideo_screen.dart';
 
 import 'homepgae_screen.dart';
+
  enum MobileVerificationState{
   Show_Mobile_Form_State,
   Show_Otp_Form_State,
+
 
 }
 
@@ -34,6 +36,7 @@ class OtpScreenState extends State<OtpScreen>{
   final TextEditingController otpController = TextEditingController();
   FirebaseAuth _auth =FirebaseAuth.instance;
 
+
    Future<void> signInWithPhoneAuthCredential(PhoneAuthCredential phoneAuthCredential) async {
      setState(() {
        showLoading= true;
@@ -44,7 +47,7 @@ class OtpScreenState extends State<OtpScreen>{
        setState(() {
          showLoading= true;
        });
-       if(authCredential?.user!= null){
+       if(authCredential.user!= null){
          Navigator.push(context, MaterialPageRoute(builder: (context)=> PageScreen()));
        }
      } on FirebaseAuthException catch(e){
