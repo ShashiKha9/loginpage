@@ -1,13 +1,12 @@
 import 'dart:io';
 
 import 'package:chewie/chewie.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:loginpage/Pages/camerascreen.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
+
+import 'homepgae_screen.dart';
 
 
 class ViewVideoScreen extends StatefulWidget{
@@ -123,9 +122,6 @@ class PageScreenState extends State <PageScreen>{
 
 
 
-
-
-
     );
   }
 
@@ -134,71 +130,71 @@ class VideoList extends StatefulWidget{
   VideoListState createState()=> VideoListState();
 }
 class VideoListState extends State<VideoList>{
-   File? videoFile;
-   recvideo() async{
-     final pickedFile = await ImagePicker().getVideo(
-       source: ImageSource.camera,
-     );
-     if(pickedFile!= null){
-       setState(() async {
-         videoFile=File(pickedFile.path) ;
+  final Directory _videoDir = Directory(
+      '/storage/emulated/0/Android/data/com.example.loginpage/files/fluttervideos');
 
-
-
-
-
-       });
-     }
-   }
-   Future<File?>pickVideoFile() async {
-     final result = await FilePicker.platform.pickFiles(type: FileType.video);
-     if(result == null) return null;
-
-     return File(result.files.single.path!);
-
-
-   }
-   ChewieController ? _chewieController;
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return Scaffold(
-      body:Container(
-        height: 250,
-          child:videoFile == null?Center(
-            child:Container(
-              color: Colors.red,
-            ),
+    if (!Directory("${_videoDir.path}").existsSync()) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text('Record the videos /nto see here'),
+        ],
+      );
+    }
+    else {
+      final videoList = _videoDir
+          .listSync()
+          .map((item) => item.path)
+          .where((item) => item.endsWith(".mp4"))
+          .toList(growable: false);
+      if (videoList != null) {
+        if (videoList.length > 0) {
+          return
+          Container(
+              margin: const EdgeInsets.symmetric(
+                  horizontal: 8.0, vertical: 8.0),
+              child: ListView.builder(
+                itemCount: videoList.length,
+                itemBuilder: (context, index) {
+                  return
+                    Container(
+                    height: 250,
+                    child: Card(
+                      child: Chewie(controller: ChewieController(
+                          videoPlayerController: VideoPlayerController.file(File(videoList[index]),
+                          ),
+
+                      )),
 
 
-          ):FittedBox(
-            fit: BoxFit.contain,
-            child: Chewie(
-                controller: ChewieController(
-                  videoPlayerController: VideoPlayerController.asset("efueijt"),
-                  aspectRatio: 16/9,
-                  autoPlay: false,
-                  looping: false,
-                )),
-          )
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(CupertinoIcons.arrow_down_doc_fill),
-        onPressed: () async {
-final file = await pickVideoFile();
-if(file == null) return;
-Chewie(
-    controller: ChewieController(
-      videoPlayerController: VideoPlayerController.file(file),
-      aspectRatio: 16/9,
-      autoPlay: false,
-      looping: false,
-    ));
+                    ),
+                  );
 
-      },
 
-      ),
-    );
+
+                },
+
+
+              ),
+
+
+
+            );
+        }
+      }
+
+    }
+    return Container();
+
+
+
   }
-}
+
+
+
+
+  }
+
