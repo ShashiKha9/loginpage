@@ -2,12 +2,11 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart'as _auth;
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:loginpage/Pages/viewvideo_screen.dart';
 
 import 'homepgae_screen.dart';
@@ -89,9 +88,6 @@ getMobileFormWidget(context){
           controller: phoneNumberController,
           decoration: InputDecoration(
             hintText: "Phone Number",
-            prefixIcon: Padding(padding: EdgeInsets.symmetric(vertical: 14,horizontal: 15),
-  child:Text("(+91)",style: TextStyle(fontSize: 16),)
-            )
           ),
 
         ),
@@ -193,11 +189,50 @@ getMobileFormWidget(context){
     ),
 
     TextSpan(
-    text: wait?resend:"resend?",
+    text: wait?resend:" resend?",
     style: TextStyle(fontSize: 18,color: wait? Colors.grey:Colors.blue),
     recognizer: TapGestureRecognizer()
-    ..onTap=wait ?null:(){
-      setState(() {
+    ..onTap=wait ?null:() {
+      _auth.verifyPhoneNumber(phoneNumber: "+91${phoneNumberController.text}",
+          forceResendingToken: _forceResendingToken,
+
+
+          verificationCompleted: (phoneAuthCredential)async{
+            setState(() {
+
+              showLoading=false;
+            });
+
+          },
+          verificationFailed: (verificationFailed)async {
+            setState(() {
+              showLoading=false;
+            });
+            _scaffoldkey.currentState!.showSnackBar(SnackBar(content: Text(verificationFailed.message!)));
+
+          },
+          codeSent: (verificationId,forceresendingToken)async{
+            setState(() {
+              currentState=MobileVerificationState.Show_Otp_Form_State;
+              this.verificationId=verificationId;
+              this._forceResendingToken=forceresendingToken;
+              showLoading= false;
+            });
+
+
+
+          },
+          codeAutoRetrievalTimeout: (verificationId)async {
+            print("Time Out. Duration Exceeded");
+            this.verificationId=verificationId;
+
+          },
+          timeout: Duration(milliseconds: 10000)
+
+
+
+
+      );      setState(() {
         starttimer();
         start=30;
         wait= true;

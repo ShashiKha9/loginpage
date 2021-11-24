@@ -3,10 +3,11 @@ import 'dart:io';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:loginpage/Pages/camerascreen.dart';
 import 'package:video_player/video_player.dart';
 
-import 'homepgae_screen.dart';
 
 
 class ViewVideoScreen extends StatefulWidget{
@@ -15,8 +16,9 @@ class ViewVideoScreen extends StatefulWidget{
   ViewVideoScreen({
     required this.videoPlayerController,
     required this.looping,
+    required Key key,
 
-});
+}) :super(key:key);
   ViewVideoScreenState createState()=> ViewVideoScreenState();
 }
 
@@ -65,6 +67,7 @@ class ViewVideoScreenState extends State<ViewVideoScreen>{
     super.dispose();
   }
 
+
 }
 class PageScreen extends StatefulWidget{
   PageScreenState createState()=> PageScreenState();
@@ -83,6 +86,9 @@ class PageScreenState extends State <PageScreen>{
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Library"),
+      ),
      body:
       PageView(
         controller: pageController,
@@ -127,9 +133,12 @@ class PageScreenState extends State <PageScreen>{
 
 }
 class VideoList extends StatefulWidget{
+
+
   VideoListState createState()=> VideoListState();
 }
 class VideoListState extends State<VideoList>{
+
   final Directory _videoDir = Directory(
       '/storage/emulated/0/Android/data/com.example.loginpage/files/fluttervideos');
 
@@ -140,7 +149,7 @@ class VideoListState extends State<VideoList>{
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text('Record the videos /nto see here'),
+          const Text('Record the videos +'),
         ],
       );
     }
@@ -163,11 +172,18 @@ class VideoListState extends State<VideoList>{
                     Container(
                     height: 250,
                     child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8)
+                      ),
+                      
                       child: Chewie(controller: ChewieController(
                           videoPlayerController: VideoPlayerController.file(File(videoList[index]),
+
+
                           ),
 
                       )),
+
 
 
                     ),
@@ -182,7 +198,10 @@ class VideoListState extends State<VideoList>{
 
 
 
+
+
             );
+
         }
       }
 
@@ -192,6 +211,7 @@ class VideoListState extends State<VideoList>{
 
 
   }
+
 
 
 

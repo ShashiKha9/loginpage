@@ -6,6 +6,7 @@ import 'package:camera/camera.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loginpage/Pages/homepgae_screen.dart';
 import 'package:path/path.dart';
@@ -55,6 +56,10 @@ class CameraScreenState extends State<CameraScreen> {
     final myImgDir = await new Directory(image).create();
     var kompresimg = new File(image+"/"+timestamp+"_video.mp4")
       ..writeAsBytesSync(videoFile!.readAsBytesSync());
+    
+    Fluttertoast.showToast(msg: "Video saved sucessfully ",
+    toastLength: Toast.LENGTH_SHORT,
+    gravity: ToastGravity.BOTTOM);
 
     // var filepath = new File("$image");
     // var newFile = await filepath.writeAsBytesSync(/*image bytes*/);

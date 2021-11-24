@@ -7,9 +7,9 @@ import 'Pages/otp_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp();
+ await  Firebase.initializeApp();
   runApp(MaterialApp(
-      home: PageScreen()));
+      home: OtpScreen()));
 }
 
 
