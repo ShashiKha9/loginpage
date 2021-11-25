@@ -2,22 +2,17 @@
 
 import 'dart:io';
 
-import 'package:camera/camera.dart';
-import 'package:chewie/chewie.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:loginpage/Pages/homepgae_screen.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:video_player/video_player.dart';
 
 
 
 class CameraScreen extends StatefulWidget{
 
-   CameraDescription? camera;
 
 
   CameraScreenState createState()=> CameraScreenState();
@@ -57,41 +52,33 @@ class CameraScreenState extends State<CameraScreen> {
     var kompresimg = new File(image+"/"+timestamp+"_video.mp4")
       ..writeAsBytesSync(videoFile!.readAsBytesSync());
     
-    Fluttertoast.showToast(msg: "Video saved sucessfully ",
+    Fluttertoast.showToast(msg: "Video posted sucessfully ",
     toastLength: Toast.LENGTH_SHORT,
     gravity: ToastGravity.BOTTOM);
 
-    // var filepath = new File("$image");
-    // var newFile = await filepath.writeAsBytesSync(/*image bytes*/);
-    // await newFile.create();
-    // ..writeAsBytesSync();
-
-
-    // return filepath;
-    //
-    //
-    //
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
     body: Center(
-   child: Column(
-    children:[
+  child:
 
 
-    RaisedButton(onPressed: () {
+    RaisedButton(
+      color: Colors.red[400],
+      onPressed: () {
       recvideo();
     },
-      padding: EdgeInsets.all(70),
-      child: Text("Rec"),),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(140)),
+        padding: EdgeInsets.all(30),
+      child: Icon(CupertinoIcons.camera_fill)),
    
-]
+
 
 
     )
-    )
+
     );
   }
 

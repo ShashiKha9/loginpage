@@ -196,10 +196,6 @@ class VideoListState extends State<VideoList>{
 
               ),
 
-
-
-
-
             );
 
         }
@@ -211,10 +207,6 @@ class VideoListState extends State<VideoList>{
 
 
   }
-
-
-
-
 
   }
 

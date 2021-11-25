@@ -140,10 +140,10 @@ getMobileFormWidget(context){
 
           );
 
-        }
+        },
 
 
-        ,
+
           child: Text("SEND"),
         ),
       ],
@@ -184,13 +184,14 @@ getMobileFormWidget(context){
     RichText(text: TextSpan(
     children: [
     TextSpan(
-    text: "Did not get otp",
+    text: "Did not get otp,",
     style: TextStyle(fontSize: 14,color: Colors.black)
     ),
+      start==0 ?
 
     TextSpan(
-    text: wait?resend:" resend?",
-    style: TextStyle(fontSize: 18,color: wait? Colors.grey:Colors.blue),
+      text: " resend?",
+    style: TextStyle(fontSize: 16,color: wait? Colors.grey:Colors.blue),
     recognizer: TapGestureRecognizer()
     ..onTap=wait ?null:() {
       _auth.verifyPhoneNumber(phoneNumber: "+91${phoneNumberController.text}",
@@ -245,7 +246,11 @@ getMobileFormWidget(context){
     }
 
 
-    )
+    ):
+    TextSpan(
+        text: " resend?",
+        style: TextStyle(fontSize: 16,color: Colors.grey)
+    ),
     ]
     )),
         FlatButton(onPressed: () {
@@ -264,7 +269,7 @@ getMobileFormWidget(context){
 
   }
 
-int start= 45;
+int start= 30;
    bool wait = false;
   @override
   Widget build(BuildContext context) {
