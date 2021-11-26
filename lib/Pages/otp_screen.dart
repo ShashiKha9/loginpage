@@ -5,12 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:loginpage/Pages/viewvideo_screen.dart';
-
-import 'homepgae_screen.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
  enum MobileVerificationState{
   Show_Mobile_Form_State,
   Show_Otp_Form_State,
@@ -27,13 +23,39 @@ class OtpScreenState extends State<OtpScreen>{
     int ?_forceResendingToken;
 
   MobileVerificationState currentState=MobileVerificationState.Show_Mobile_Form_State;
-  late String dialCodeDigits = "+00";
+   late String dialCodeDigits = "+00";
   final  GlobalKey<ScaffoldState> _scaffoldkey =GlobalKey<ScaffoldState>();
    late String verificationId;
   static bool  showLoading= false;
-  final TextEditingController phoneNumberController = TextEditingController();
+   final TextEditingController phoneNumberController = TextEditingController();
   final TextEditingController otpController = TextEditingController();
   FirebaseAuth _auth =FirebaseAuth.instance;
+   String ? newLaunch;
+
+
+   storeData() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  setState(() {
+    // _counter= (prefs.getInt("counter")??0);
+    bool newLaunch = (prefs.getBool("newLaunch")?? true);
+  });
+
+}
+@override
+void initState(){
+  super.initState();
+  storeData();
+}
+   void _incrementCounter()  async {
+     SharedPreferences prefs = await SharedPreferences.getInstance();
+
+     setState(() {
+       // prefs.setInt('counter', _counter);
+
+
+     });
+   }
 
 
    Future<void> signInWithPhoneAuthCredential(PhoneAuthCredential phoneAuthCredential) async {
@@ -77,7 +99,6 @@ class OtpScreenState extends State<OtpScreen>{
      });
 
    }
-
 
 getMobileFormWidget(context){
     return Column(
@@ -139,17 +160,23 @@ getMobileFormWidget(context){
 
 
           );
+         SharedPreferences prefs = await SharedPreferences.getInstance();
+         prefs.setString("phoneNumber", phoneNumberController.text);
 
         },
 
 
 
+
           child: Text("SEND"),
         ),
+
       ],
+      
     );
 
   }
+
   getOtpFormWidget(context){
     return Column(
       children: [
@@ -282,10 +309,6 @@ int start= 30;
        : getOtpFormWidget(context),
       )
     );
-
-
-
-
 
 }
 }

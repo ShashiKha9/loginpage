@@ -6,8 +6,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:loginpage/Pages/otp_screen.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 
@@ -62,17 +64,29 @@ class CameraScreenState extends State<CameraScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
     body: Center(
-  child:
+  child: Column(
+    children: [
+      RaisedButton(
+          color: Colors.red[400],
+          onPressed: () {
+            recvideo();
+          },
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(140)),
+          padding: EdgeInsets.all(30),
+          child: Icon(CupertinoIcons.camera_fill)),
+      RaisedButton(onPressed: () async {
+        Navigator.push(context, MaterialPageRoute(builder: (context)=> OtpScreen()));
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.remove("phoneNumber");
+
+      },
+      child: Text("Logout"),)
+    ],
+  )
 
 
-    RaisedButton(
-      color: Colors.red[400],
-      onPressed: () {
-      recvideo();
-    },
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(140)),
-        padding: EdgeInsets.all(30),
-      child: Icon(CupertinoIcons.camera_fill)),
+
+
    
 
 

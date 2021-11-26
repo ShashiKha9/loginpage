@@ -6,7 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:loginpage/Pages/camerascreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
+
+import 'otp_screen.dart';
 
 
 
@@ -85,10 +88,30 @@ class PageScreenState extends State <PageScreen>{
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Scaffold(
+    return SafeArea(
+    child:  Scaffold(
       appBar: AppBar(
         title: Text("Library"),
+        
       ),
+     drawer: Drawer(
+      child:ListTile(
+        title:Text("Logout",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w700),),
+         onTap: () async {
+           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> OtpScreen()));
+           SharedPreferences prefs = await SharedPreferences.getInstance();
+           prefs.remove("phoneNumber");
+
+         }
+
+
+
+
+
+      ),
+
+     ),
+
      body:
       PageView(
         controller: pageController,
@@ -127,7 +150,7 @@ class PageScreenState extends State <PageScreen>{
       ),
 
 
-
+)
     );
   }
 
