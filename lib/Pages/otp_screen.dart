@@ -101,7 +101,9 @@ void initState(){
    }
 
 getMobileFormWidget(context){
-    return Column(
+    return Scaffold(
+        backgroundColor: Color(0xff0f1316),
+        body:   Column(
       children: [
         Image(image: NetworkImage("https://assets.turbologo.com/blog/en/2019/11/19084834/gaming-logo-cover.jpg")),
       Padding(padding: EdgeInsets.only(top: 90,left: 20,right: 20),
@@ -185,7 +187,7 @@ child: Container(
 ),
         ),
       ],
-      
+   )
     );
 
   }
@@ -193,10 +195,11 @@ child: Container(
   getOtpFormWidget(context){
     return Column(
       children: [
-        Image(image: NetworkImage("https://assets.turbologo.com/blog/en/2019/11/19084834/gaming-logo-cover.jpg")),
+       Image(image: NetworkImage("https://assets.turbologo.com/blog/en/2019/11/19084834/gaming-logo-cover.jpg"),),
         Padding(padding: EdgeInsets.only(top: 90,left: 20,right: 20),
        child: TextField(
          style: TextStyle(color: Colors.white),
+          keyboardType: TextInputType.number,
           controller: otpController,
           decoration: InputDecoration(
               hintText: "Enter OTP",
@@ -332,17 +335,45 @@ int start= 30;
    bool wait = false;
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
-      backgroundColor: Color(0xff0f1316),
+      backgroundColor: Color(0xff03fccf),
         body: Container(
-        child: showLoading ? Center(
+          child:ClipPath(
+            clipper: MyClipper(),
+            child: showLoading ? Center(
           child: CircularProgressIndicator(),
         ) :currentState==MobileVerificationState.Show_Mobile_Form_State
        ? getMobileFormWidget(context)
-       : getOtpFormWidget(context),
-      )
+            : getOtpFormWidget(context),
+
+      ),
+
+
+
+        )
     );
 
 }
 }
+
+class MyClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    var path = new Path();
+    path.lineTo(0.0, size.height);
+    path.lineTo(size.width, size.height / 1.5);
+    path.lineTo(size.width, 0.0);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper)=> false;
+
+
+  
+
+}
+
 
