@@ -103,19 +103,23 @@ void initState(){
 getMobileFormWidget(context){
     return Column(
       children: [
-        Padding(padding: EdgeInsets.only(top: 90),
+        Image(image: NetworkImage("https://assets.turbologo.com/blog/en/2019/11/19084834/gaming-logo-cover.jpg")),
+      Padding(padding: EdgeInsets.only(top: 90,left: 20,right: 20),
       child:Container(
       child:  TextField(
+        style: TextStyle(color: Colors.white),
           controller: phoneNumberController,
           decoration: InputDecoration(
             hintText: "Phone Number",
+            hintStyle: TextStyle(color: Colors.white54),
+            suffixIcon: Icon(CupertinoIcons.phone,color: Colors.white54,),
           ),
-
         ),
         ),
         ),
-        SizedBox(height: 16,),
-        FlatButton(onPressed:() async{
+        SizedBox(height: 22,),
+        FlatButton(
+          onPressed:() async{
           starttimer();
           setState(() {
             showLoading=true;
@@ -167,10 +171,19 @@ getMobileFormWidget(context){
 
 
 
+child: Container(
+  decoration: BoxDecoration(
+    gradient: LinearGradient(colors: [
+      Color(0xff05f2b3),Colors.blue
+    ]),
+    borderRadius: BorderRadius.circular(20)
 
-          child: Text("SEND"),
+  ),
+  padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+  child: Text("Send",style: TextStyle(fontSize: 20,color: Colors.white,fontWeight: FontWeight.w300),),
+
+),
         ),
-
       ],
       
     );
@@ -180,11 +193,15 @@ getMobileFormWidget(context){
   getOtpFormWidget(context){
     return Column(
       children: [
-        Padding(padding: EdgeInsets.only(top: 90),
+        Image(image: NetworkImage("https://assets.turbologo.com/blog/en/2019/11/19084834/gaming-logo-cover.jpg")),
+        Padding(padding: EdgeInsets.only(top: 90,left: 20,right: 20),
        child: TextField(
+         style: TextStyle(color: Colors.white),
           controller: otpController,
           decoration: InputDecoration(
-              hintText: "Enter OTP"
+              hintText: "Enter OTP",
+            hintStyle: TextStyle(color: Colors.white54),
+            suffixIcon: Icon(CupertinoIcons.padlock,color: Colors.white54,)
           ),
         ),
         ),
@@ -193,13 +210,13 @@ getMobileFormWidget(context){
        Wrap(
          children: [
            Text("Send OTP again in ",style: TextStyle(
-             fontSize: 14
+             fontSize: 14,color: Colors.white54
            ),),
            Text("00:$start ",style: TextStyle(
                fontSize: 14,color: Colors.red
            ),),
            Text("sec ",style: TextStyle(
-               fontSize: 14
+               fontSize: 14,color: Colors.white54
            ),),
     ]
        ),
@@ -212,7 +229,7 @@ getMobileFormWidget(context){
     children: [
     TextSpan(
     text: "Did not get otp,",
-    style: TextStyle(fontSize: 14,color: Colors.black)
+    style: TextStyle(fontSize: 14,color: Colors.white54)
     ),
       start==0 ?
 
@@ -280,12 +297,27 @@ getMobileFormWidget(context){
     ),
     ]
     )),
+        SizedBox(
+         height: 22,
+        ),
         FlatButton(onPressed: () {
           PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
             verificationId: verificationId, smsCode: otpController.text,);
           signInWithPhoneAuthCredential(phoneAuthCredential);
         }
-            , child: Text("Get Started")),
+            , child: Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(colors: [
+                  Color(0xff05f2b3),Colors.blue
+                ]),
+                borderRadius: BorderRadius.circular(20)
+
+            ),
+            padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+            child: Text("Get Started",style: TextStyle(fontSize: 20,color: Colors.white,fontWeight: FontWeight.w300),),
+
+          ),
+        ),
     ],
 
 
@@ -301,7 +333,8 @@ int start= 30;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      backgroundColor: Color(0xff0f1316),
+        body: Container(
         child: showLoading ? Center(
           child: CircularProgressIndicator(),
         ) :currentState==MobileVerificationState.Show_Mobile_Form_State

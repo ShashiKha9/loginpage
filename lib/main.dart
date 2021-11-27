@@ -11,8 +11,10 @@ void main() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var phone =prefs.getString("phoneNumber");
   runApp(MaterialApp(
+      home:OtpScreen()
 
-      home: phone == null? OtpScreen():PageScreen()));
+      // home: phone == null? OtpScreen():PageScreen()
+  ));
 }
 
 

@@ -58,9 +58,6 @@ class ViewVideoScreenState extends State<ViewVideoScreen>{
 
         ),
       ),
-
-
-
     );
   }
   @override
@@ -101,15 +98,8 @@ class PageScreenState extends State <PageScreen>{
            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> OtpScreen()));
            SharedPreferences prefs = await SharedPreferences.getInstance();
            prefs.remove("phoneNumber");
-
          }
-
-
-
-
-
       ),
-
      ),
 
      body:
