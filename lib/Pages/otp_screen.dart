@@ -346,7 +346,6 @@ int start= 30;
         ) :currentState==MobileVerificationState.Show_Mobile_Form_State
        ? getMobileFormWidget(context)
             : getOtpFormWidget(context),
-
       ),
 
 
@@ -361,10 +360,15 @@ class MyClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     var path = new Path();
-    path.lineTo(0.0, size.height);
-    path.lineTo(size.width, size.height / 1.5);
-    path.lineTo(size.width, 0.0);
-    path.close();
+    path.lineTo(0.0, size.height-120);
+    // path.lineTo(size.width, size.height / 1.5);
+    // path.lineTo(size.width, 0.0);
+    var cp = Offset(120,size.height );
+    var ep = Offset(size.width,size.height/2);
+    path.quadraticBezierTo(cp.dx,cp.dy,ep.dx,ep.dy);
+    path.lineTo(size.width, size.height);
+    path.lineTo(size.width, 0);
+    // path.close();
     return path;
   }
 
