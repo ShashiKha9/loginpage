@@ -5,7 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loginpage/Pages/viewvideo_screen.dart';
+import 'package:loginpage/bloc/login_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
  enum MobileVerificationState{
   Show_Mobile_Form_State,
@@ -31,6 +33,7 @@ class OtpScreenState extends State<OtpScreen>{
   final TextEditingController otpController = TextEditingController();
   FirebaseAuth _auth =FirebaseAuth.instance;
    String ? newLaunch;
+   final loginbloc = LoginBloc();
 
 
    storeData() async {
@@ -42,6 +45,7 @@ class OtpScreenState extends State<OtpScreen>{
   });
 
 }
+
 @override
 void initState(){
   super.initState();
@@ -192,151 +196,165 @@ child: Container(
 
   }
 
+
   getOtpFormWidget(context){
-    return Column(
-      children: [
-       Image(image: NetworkImage("https://assets.turbologo.com/blog/en/2019/11/19084834/gaming-logo-cover.jpg"),),
-        Padding(padding: EdgeInsets.only(top: 90,left: 20,right: 20),
-       child: TextField(
-         style: TextStyle(color: Colors.white),
-          keyboardType: TextInputType.number,
-          controller: otpController,
-          decoration: InputDecoration(
-              hintText: "Enter OTP",
-            hintStyle: TextStyle(color: Colors.white54),
-            suffixIcon: Icon(CupertinoIcons.padlock,color: Colors.white54,)
-          ),
-        ),
-        ),
-        SizedBox(height: 16,),
+     BlocBuilder(
+       bloc: loginbloc,
+         builder: (
+     context,LoginState
+     ){
+           return Column(
+             children: [
+               Image(image: NetworkImage("https://assets.turbologo.com/blog/en/2019/11/19084834/gaming-logo-cover.jpg"),),
+               Padding(padding: EdgeInsets.only(top: 90,left: 20,right: 20),
+                 child: TextField(
+                   style: TextStyle(color: Colors.white),
+                   keyboardType: TextInputType.number,
+                   controller: otpController,
+                   decoration: InputDecoration(
+                       hintText: "Enter OTP",
+                       hintStyle: TextStyle(color: Colors.white54),
+                       suffixIcon: Icon(CupertinoIcons.padlock,color: Colors.white54,)
+                   ),
+                 ),
+               ),
+               SizedBox(height: 16,),
 
-       Wrap(
-         children: [
-           Text("Send OTP again in ",style: TextStyle(
-             fontSize: 14,color: Colors.white54
-           ),),
-           Text("00:$start ",style: TextStyle(
-               fontSize: 14,color: Colors.red
-           ),),
-           Text("sec ",style: TextStyle(
-               fontSize: 14,color: Colors.white54
-           ),),
-    ]
-       ),
-        SizedBox(
-          height: 10,
-        ),
-
-
-    RichText(text: TextSpan(
-    children: [
-    TextSpan(
-    text: "Did not get otp,",
-    style: TextStyle(fontSize: 14,color: Colors.white54)
-    ),
-      start==0 ?
-
-    TextSpan(
-      text: " resend?",
-    style: TextStyle(fontSize: 16,color: wait? Colors.grey:Colors.blue),
-    recognizer: TapGestureRecognizer()
-    ..onTap=wait ?null:() {
-      _auth.verifyPhoneNumber(phoneNumber: "+91${phoneNumberController.text}",
-          forceResendingToken: _forceResendingToken,
+               Wrap(
+                   children: [
+                     Text("Send OTP again in ",style: TextStyle(
+                         fontSize: 14,color: Colors.white54
+                     ),),
+                     Text("00:$start ",style: TextStyle(
+                         fontSize: 14,color: Colors.red
+                     ),),
+                     Text("sec ",style: TextStyle(
+                         fontSize: 14,color: Colors.white54
+                     ),),
+                   ]
+               ),
+               SizedBox(
+                 height: 10,
+               ),
 
 
-          verificationCompleted: (phoneAuthCredential)async{
-            setState(() {
+               RichText(text: TextSpan(
+                   children: [
+                     TextSpan(
+                         text: "Did not get otp,",
+                         style: TextStyle(fontSize: 14,color: Colors.white54)
+                     ),
+                     start==0 ?
 
-              showLoading=false;
-            });
-
-          },
-          verificationFailed: (verificationFailed)async {
-            setState(() {
-              showLoading=false;
-            });
-            _scaffoldkey.currentState!.showSnackBar(SnackBar(content: Text(verificationFailed.message!)));
-
-          },
-          codeSent: (verificationId,forceresendingToken)async{
-            setState(() {
-              currentState=MobileVerificationState.Show_Otp_Form_State;
-              this.verificationId=verificationId;
-              this._forceResendingToken=forceresendingToken;
-              showLoading= false;
-            });
+                     TextSpan(
+                         text: " resend?",
+                         style: TextStyle(fontSize: 16,color: wait? Colors.grey:Colors.blue),
+                         recognizer: TapGestureRecognizer()
+                           ..onTap=wait ?null:() {
+                             _auth.verifyPhoneNumber(phoneNumber: "+91${phoneNumberController.text}",
+                                 forceResendingToken: _forceResendingToken,
 
 
+                                 verificationCompleted: (phoneAuthCredential)async{
+                                   setState(() {
 
-          },
-          codeAutoRetrievalTimeout: (verificationId)async {
-            print("Time Out. Duration Exceeded");
-            this.verificationId=verificationId;
+                                     showLoading=false;
+                                   });
 
-          },
-          timeout: Duration(milliseconds: 10000)
+                                 },
+                                 verificationFailed: (verificationFailed)async {
+                                   setState(() {
+                                     showLoading=false;
+                                   });
+                                   _scaffoldkey.currentState!.showSnackBar(SnackBar(content: Text(verificationFailed.message!)));
+
+                                 },
+                                 codeSent: (verificationId,forceresendingToken)async{
+                                   setState(() {
+                                     currentState=MobileVerificationState.Show_Otp_Form_State;
+                                     this.verificationId=verificationId;
+                                     this._forceResendingToken=forceresendingToken;
+                                     showLoading= false;
+                                   });
 
 
 
+                                 },
+                                 codeAutoRetrievalTimeout: (verificationId)async {
+                                   print("Time Out. Duration Exceeded");
+                                   this.verificationId=verificationId;
 
-      );      setState(() {
-        starttimer();
-        start=30;
-        wait= true;
-      });
-
-    print("judnu");
-    PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
-    verificationId: verificationId, smsCode: otpController.text,);
-    signInWithPhoneAuthCredential(phoneAuthCredential);
-    }
-
-
-    ):
-    TextSpan(
-        text: " resend?",
-        style: TextStyle(fontSize: 16,color: Colors.grey)
-    ),
-    ]
-    )),
-        SizedBox(
-         height: 22,
-        ),
-        FlatButton(onPressed: () {
-          PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
-            verificationId: verificationId, smsCode: otpController.text,);
-          signInWithPhoneAuthCredential(phoneAuthCredential);
-        }
-            , child: Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(colors: [
-                  Color(0xff05f2b3),Colors.blue
-                ]),
-                borderRadius: BorderRadius.circular(20)
-
-            ),
-            padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-            child: Text("Get Started",style: TextStyle(fontSize: 20,color: Colors.white,fontWeight: FontWeight.w300),),
-
-          ),
-        ),
-    ],
+                                 },
+                                 timeout: Duration(milliseconds: 10000)
 
 
 
 
+                             );      setState(() {
+                               starttimer();
+                               start=30;
+                               wait= true;
+                             });
 
-    );
+                             print("judnu");
+                             PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
+                               verificationId: verificationId, smsCode: otpController.text,);
+                             signInWithPhoneAuthCredential(phoneAuthCredential);
+                           }
+
+
+                     ):
+                     TextSpan(
+                         text: " resend?",
+                         style: TextStyle(fontSize: 16,color: Colors.grey)
+                     ),
+                   ]
+               )),
+               SizedBox(
+                 height: 22,
+               ),
+               FlatButton(onPressed: () {
+                 PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
+                   verificationId: verificationId, smsCode: otpController.text,);
+                 signInWithPhoneAuthCredential(phoneAuthCredential);
+               }
+                 , child: Container(
+                   decoration: BoxDecoration(
+                       gradient: LinearGradient(colors: [
+                         Color(0xff05f2b3),Colors.blue
+                       ]),
+                       borderRadius: BorderRadius.circular(20)
+
+                   ),
+                   padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                   child: Text("Get Started",style: TextStyle(fontSize: 20,color: Colors.white,fontWeight: FontWeight.w300),),
+
+                 ),
+               ),
+             ],
+
+
+
+
+
+           );
+         });
+
+
 
   }
+
 
 int start= 30;
    bool wait = false;
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
+    return BlocProvider(
+        create: (_)=> LoginBloc(),
+    
+     child: MaterialApp(
+home:      Scaffold(
       backgroundColor: Color(0xff03fccf),
         body: Container(
           child:ClipPath(
@@ -351,8 +369,13 @@ int start= 30;
 
 
         )
+)
+)
     );
 
+}
+void dispose(){
+    super.dispose();
 }
 }
 
